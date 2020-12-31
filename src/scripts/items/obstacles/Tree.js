@@ -1,4 +1,4 @@
-import Item from '../../objects/Item.js';
+import Item from '../Item.js';
 
 export default class Tree extends Item {
     constructor(x, y) {
