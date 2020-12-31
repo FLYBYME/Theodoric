@@ -73,7 +73,7 @@ export default class World extends EventEmitter {
             }
             if (bob.move(input.direction)) {
                 //console.log(bob, input)
-                setTimeout(() => this.emit('item:move', bob.toJSON()), 10)
+                this.emit('item:move', bob.toJSON())
             }
         }
 
