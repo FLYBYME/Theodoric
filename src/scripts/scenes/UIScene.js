@@ -31,18 +31,18 @@ export default class UIScene extends Phaser.Scene {
 
     create(mainScene) {
         this.mainScene = mainScene;
-        this.client = mainScene.client
+        this.spriteManager = mainScene.spriteManager
         this.player = {};
         this.second = {};
 
 
 
 
-        this.client.on('player', (item) => {
-            this.updateStats('player', item)
+        this.spriteManager.on('player', (sprite) => {
+            this.updateStats('player', sprite.item)
         });
-        this.client.on('second', (item) => {
-            this.updateStats('second', item)
+        this.spriteManager.on('second', (sprite) => {
+            this.updateStats('second', sprite.item)
         });
 
         this.aGrid = new AlignGrid({

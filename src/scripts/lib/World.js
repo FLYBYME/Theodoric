@@ -2,6 +2,7 @@ import EventEmitter from './EventEmitter.js'
 import Grid from './Grid.js';
 import Bob from '../characters/Bob.js'
 
+import Characters from '../characters/index.js'
 import Obstacles from '../items/obstacles/index.js'
 import Collectables from '../items/collectables/index.js'
 import ItemManager from './ItemManager.js';
@@ -107,26 +108,35 @@ export default class World extends EventEmitter {
         this.obstacleCount = count;
     }
     generateWorld() {
-
         for (let index = 0; index < this.obstacleCount; index++) {
             const location = this.grid.getRandomLocation();
-            const item = new Obstacles.Tree(location.x, location.y, this);
-            this.itemManager.add(item);
+            this.generateObstacle(location);
         }
         for (let index = 0; index < this.collectableCount; index++) {
             const location = this.grid.getRandomLocation();
-            const item = new Collectables.Chest(location.x, location.y, this);
-            this.itemManager.add(item);
+            this.generateCollectable(location);
         }
-
-
+    }
+    generateCollectable(location) {
+        const type = Collectables.keys[Math.floor(Math.random() * Collectables.keys.length)]
+        const item = new Collectables[type](location.x, location.y, this);
+        this.itemManager.add(item);
+        return item;
+    }
+    generateObstacle(location) {
+        const type = Obstacles.keys[Math.floor(Math.random() * Obstacles.keys.length)]
+        const item = new Obstacles[type](location.x, location.y, this);
+        this.itemManager.add(item);
+        return item;
     }
     /*****
      * characters
      */
     createCharacter(x, y, type, id) {
+        let next = Characters.keys.shift()
+        Characters.keys.push(next)
 
-        const character = new Bob(x, y, this, type, id);
+        const character = new Characters[next](x, y, this, type, id);
 
         this.itemManager.add(character)
 

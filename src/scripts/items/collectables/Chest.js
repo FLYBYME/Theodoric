@@ -6,7 +6,7 @@ class StageTest1 extends Item {
         super(x, y, world);
 
         this.tileMapID = 35;
-        this.name = 'open-chest'
+        this.name = 'openchest'
 
         this.setAsCollectable('gold', 10);
     }
@@ -18,7 +18,7 @@ export default class StageTest extends Item {
         super(x, y, world);
 
         this.tileMapID = 36;
-        this.name = 'closed-chest'
+        this.name = 'closedchest'
 
         this.setNextStage(StageTest1);
     }

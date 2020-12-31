@@ -7,6 +7,7 @@ import Bob from '../characters/Bob'
 import Obstacles from '../items/obstacles'
 import Collectables from '../items/collectables'
 import ItemManager from './ItemManager';
+import BobUI from '../ui/SandyUI.js';
 
 var S4 = function () {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -29,25 +30,9 @@ export default class WorldClient extends EventEmitter {
 
         this.world = world;
 
-        this.on('player', (player) => {
-            const sprite = this.findSprite(player.id);
-            switch (player.direction) {
-                case 'right':
-                    sprite.setFrame(28);
-                    break;
-                case 'left':
-                    sprite.setFrame(16);
-                    break;
-                case 'up':
-                    sprite.setFrame(40);
-                    break;
-                case 'down':
-                    sprite.setFrame(4);
-                    break;
-
-                default:
-                    break;
-            }
+        this.on('player', (item) => {
+            if (this.bob)
+                this.bob.update(item)
         })
 
     }
@@ -57,7 +42,7 @@ export default class WorldClient extends EventEmitter {
 
 
     attachWorldEvents() {
-
+return;
 
         //world.state().items.forEach((item) => this.onSpriteAdd(item));
 
@@ -65,9 +50,12 @@ export default class WorldClient extends EventEmitter {
             const sprite = this.onSpriteAdd(item)
             if (item.id == this.id) {
                 this.emit('player', item)
-                this.scene.cameras.main.startFollow(sprite, true)
+                this.bob = new BobUI(sprite, item);
+                console.log(sprite)
+                this.scene.cameras.main.startFollow(sprite, true);
+                this.bob.update(item)
             }
-            else if (item.name == 'bob') {
+            else if (item.name == 'sandy') {
                 if (this.second == null) {
                     this.second = item.id;
                     this.scene.cameras.cameras[1].startFollow(sprite, true)
@@ -119,7 +107,7 @@ export default class WorldClient extends EventEmitter {
     onSpriteAdd(item) {
 
         if (this.findSprite(item.id))
-            return console.log('sprite found');
+            return this.findSprite(item.id);
 
         let sprite = this.scene.add.tileSprite(
             item.x,
@@ -133,8 +121,6 @@ export default class WorldClient extends EventEmitter {
         sprite.setOrigin(0, 0);
 
         sprite.id = item.id;
-
-
 
         this.scene.sprites.push(sprite);
 

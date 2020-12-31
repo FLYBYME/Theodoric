@@ -9,6 +9,7 @@ import Grid from '../lib/Grid'
 import World from '../lib/World'
 import StageTest from '../items/collectables/Chest'
 import WorldClient from '../lib/WorldClient'
+import spriteManager from '../lib/spriteManager'
 
 window.sim = null;
 
@@ -25,8 +26,6 @@ world.setup();
 //window.bob = world.createCharacter(0, 0, 'bob');
 
 export default class MainScene extends Phaser.Scene {
-  fpsText
-
   constructor() {
     super({ key: 'MainScene' })
   }
@@ -61,10 +60,16 @@ export default class MainScene extends Phaser.Scene {
 
     this.client = new WorldClient(this, world);
     this.client.attachWorldEvents();
+
+    this.spriteManager = new spriteManager(this, world, this.client.id);
+
+    this.spriteManager.once('follow', (sprite) => this.cameras.main.startFollow(sprite.getFollow(), true))
+
+
     this.scene.run('UIScene', this)
     setTimeout(() => {
 
-      world.state().items.forEach((item) => this.client.onSpriteAdd(item));
+      world.state().items.forEach((item) => this.spriteManager.process(item));
       console.log(world)
       const input = this.getInputs();
       this.client.sendInput(input)

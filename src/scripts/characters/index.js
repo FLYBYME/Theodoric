@@ -1,5 +1,7 @@
 import Bob from './Bob.js'
-
+import Sandy from './Sandy.js'
 export default {
-    Bob
+    Bob,
+    Sandy,
+    keys: ['Sandy', 'Bob']
 }
