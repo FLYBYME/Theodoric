@@ -1,4 +1,4 @@
-import Item from '../objects/Item.js'
+import Item from '../items/Item.js'
 import Character from './Character.js';
 
 

@@ -1,6 +1,6 @@
-import Bounds from '../objects/Bounds.js';
-import Grass from '../objects/Grass.js';
-import Item from '../objects/Item.js';
+import Bounds from '../items/Bounds.js';
+import Grass from '../items/Grass.js';
+import Item from '../items/Item.js';
 
 export default class Grid {
     constructor(size) {

@@ -3,7 +3,7 @@ import EventEmitter from './EventEmitter.js'
 import Grid from './Grid.js';
 import Bob from '../characters/Bob.js'
 
-import Obstacles from '../objects/obstacles/index.js'
+import Obstacles from '../items/obstacles/index.js'
 
 export default class ItemManager extends EventEmitter {
 

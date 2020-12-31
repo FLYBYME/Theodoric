@@ -4,8 +4,8 @@ import EventEmitter from './EventEmitter'
 import Grid from './Grid';
 import Bob from '../characters/Bob'
 
-import Obstacles from '../objects/obstacles'
-import Collectables from '../objects/collectables'
+import Obstacles from '../items/obstacles'
+import Collectables from '../items/collectables'
 import ItemManager from './ItemManager';
 
 var S4 = function () {

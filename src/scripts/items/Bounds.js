@@ -1,4 +1,4 @@
-import Item from './Item.js';
+import Item from '../objects/Item.js';
 
 export default class Bounds extends Item {
     constructor(x, y) {

@@ -2,8 +2,8 @@ import EventEmitter from './EventEmitter.js'
 import Grid from './Grid.js';
 import Bob from '../characters/Bob.js'
 
-import Obstacles from '../objects/obstacles/index.js'
-import Collectables from '../objects/collectables/index.js'
+import Obstacles from '../items/obstacles/index.js'
+import Collectables from '../items/collectables/index.js'
 import ItemManager from './ItemManager.js';
 import Timer from './Timer.js';
 

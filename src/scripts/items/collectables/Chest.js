@@ -1,5 +1,5 @@
 import Collectable from '../Collectable.js';
-import Item from '../Item.js';
+import Item from '../../objects/Item.js';
 
 class StageTest1 extends Item {
     constructor(x, y, world) {

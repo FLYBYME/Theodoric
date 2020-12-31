@@ -1,13 +1,13 @@
 import PhaserLogo from '../objects/phaserLogo'
 import FpsText from '../objects/fpsText'
 import Bob from '../characters/Bob'
-import Tree from '../objects/obstacles/Tree'
+import Tree from '../items/obstacles/Tree'
 
 
 import { createCharacterAnims } from '../anims/CharacterAnims'
 import Grid from '../lib/Grid'
 import World from '../lib/World'
-import StageTest from '../objects/collectables/Chest'
+import StageTest from '../items/collectables/Chest'
 import WorldClient from '../lib/WorldClient'
 
 window.sim = null;

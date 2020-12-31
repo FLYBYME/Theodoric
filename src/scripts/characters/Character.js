@@ -1,5 +1,5 @@
 import Timer from '../lib/Timer.js';
-import Item from '../objects/Item.js'
+import Item from '../items/Item.js'
 
 
 class CharacterStats {
