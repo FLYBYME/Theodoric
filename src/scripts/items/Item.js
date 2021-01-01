@@ -15,12 +15,6 @@ class Value {
     }
 }
 
-var S4 = function () {
-    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-};
-var uuid = function () {
-    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
-};
 export default class Item extends EventEmitter {
 
 
@@ -60,7 +54,7 @@ export default class Item extends EventEmitter {
 
     update() {
 
-        
+
     }
     /****
      * 
@@ -114,7 +108,8 @@ export default class Item extends EventEmitter {
         this.collectable = true;
         this.bounds = false;
         this.character = false;
-        this.value = new Value(type, worth);
+        if (type)
+            this.value = new Value(type, worth);
     }
     isEmpty() {
         return this.empty;

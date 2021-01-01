@@ -4,6 +4,7 @@ import Grid from './Grid.js';
 import Bob from '../characters/Bob.js'
 
 import Obstacles from '../items/obstacles/index.js'
+import Item from './Item.js';
 
 export default class ItemManager extends EventEmitter {
 
@@ -43,6 +44,20 @@ export default class ItemManager extends EventEmitter {
         }
         return items;
     }
+
+    create(name, x, y) {
+        const config = this.config.find((c) => c.name == name);
+
+        if (!config)
+            return null;
+
+        const item = new Item(config);
+
+        this.add(item);
+
+        return item;
+    }
+
     add(item) {
         this.grid.addGridItem(item);
 
