@@ -1,6 +1,6 @@
 
 import EventEmitter from './EventEmitter.js'
-import UI from '../ui/index.js'
+import BaseUI from '../ui/BaseUI.js'
 
 export default class spriteManager extends EventEmitter {
 
@@ -58,7 +58,7 @@ export default class spriteManager extends EventEmitter {
 
     createSprite(item) {
 
-        let sprite = new UI.BaseUI(this.scene, item);
+        let sprite = new BaseUI(this.scene, item);
 
         sprite.createSprite()
 

@@ -1,6 +1,3 @@
-import Bounds from '../items/Bounds.js';
-import Grass from '../items/Grass.js';
-import Item from '../items/Item.js';
 
 export default class Grid {
     constructor(world) {
