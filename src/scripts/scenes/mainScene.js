@@ -1,26 +1,19 @@
-import PhaserLogo from '../objects/phaserLogo'
-import FpsText from '../objects/fpsText'
-import Bob from '../characters/Bob'
-import Tree from '../items/obstacles/Tree'
-
-
-import { createCharacterAnims } from '../anims/CharacterAnims'
-import Grid from '../lib/Grid'
-import World from '../lib/World'
-import StageTest from '../items/collectables/Chest'
-import WorldClient from '../lib/WorldClient'
-import spriteManager from '../lib/spriteManager'
-import Map from '../lib/Map'
+import spriteManager from '../lib/spriteManager';
+import uuid from '../lib/uuid';
+import World from '../lib/World';
 
 window.sim = null;
-
-window.world = new World(null, 32 * 25);
+const worldSize = 32 * 20;
+window.world = new World(null, worldSize);
 
 
 
 world.setCollectableCount(20);
-world.setObstacleCount(50);
+world.setObstacleCount(20);
 
+world.on('item:add', (item) => console.log(`World: Item created ${item.name} X${item.x}:Y${item.y}`));
+world.on('item:remove', (item) => console.log(`World: Item removed ${item.name} X${item.x}:Y${item.y}`));
+world.on('item:update', (item) => console.log(`World: Item update ${item.name} X${item.x}:Y${item.y}`));
 
 
 world.setup();
@@ -38,7 +31,7 @@ export default class MainScene extends Phaser.Scene {
 
 
     window.sim = this;
-    this.worldSize = 32 * 25;
+    this.worldSize = worldSize;
 
     this.cameras.main.setBounds(0, 0, this.worldSize, this.worldSize);
     this.physics.world.setBounds(0, 0, this.worldSize, this.worldSize);
@@ -52,46 +45,39 @@ export default class MainScene extends Phaser.Scene {
     this.background = this.add.tileSprite(0, 0, this.worldSize, this.worldSize, 'tiles', 65);
     this.background.setScale(2);
 
-    createCharacterAnims(this.anims);
-
-    this.sprites = [];
+    this.id = uuid();
 
 
-    //this.io = io('http://192.168.2.29:3000');
+    if (typeof io == "undefined") {
+      this.world = world;
+    } else {
+      this.world = io();
+    }
 
-    this.client = new WorldClient(this, world);
-    this.client.attachWorldEvents();
-
-    this.spriteManager = new spriteManager(this, world, this.client.id);
+    this.spriteManager = new spriteManager(this, this.world, this.id);
 
     this.spriteManager.once('follow', (sprite) => this.cameras.main.startFollow(sprite.getFollow(), true))
+    this.spriteManager.on('player', (sprite) => console.log(sprite))
 
 
-    this.map = new Map([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 46, 0, 47, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 54, 0, 55, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 49, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    this.map.converMapData()
-    this.scene.run('UIScene', this)
-    setTimeout(() => {
-
-      world.state().items.forEach((item) => this.spriteManager.process(item));
-      console.log(world)
-      const input = this.getInputs();
-      this.client.sendInput(input)
-
-    }, 1000)
+    if (typeof io == "undefined")
+      this.world.itemManager.toJSON().forEach(item => {
+        world.emit('item:add', item);
+      });
+    process.nextTick(() => this.world.emit('input', this.getInputs()))
   }
 
   update() {
 
 
     world.update();
-    const input = this.getInputs();
-    input.id = this.client.id;
-    if (input.direction != 'stop')
-      this.client.sendInput(input)
-    return;
-    const cursors = this.cursors;
-    let { x, y } = this.player;
 
+    this.spriteManager.update();
+    const input = this.getInputs();
+    if (input.direction != 'stop') {
+      console.log(`new input ${input.direction}`);
+      world.emit('input', input);
+    }
   }
 
 
@@ -103,7 +89,6 @@ export default class MainScene extends Phaser.Scene {
     for (let index = 0; index < directions.length; index++) {
       const dir = directions[index];
       if (Phaser.Input.Keyboard.JustDown(cursors[dir])) {
-        console.log(dir)
         direction = dir;
         break
       }

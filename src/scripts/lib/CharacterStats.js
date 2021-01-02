@@ -1,6 +1,7 @@
+import Timer from "./Timer";
 
 export default class CharacterStats {
-    constructor() {
+    constructor(stats) {
         this.start = Date.now();
         this.end = Date.now();
         this.health = 100;

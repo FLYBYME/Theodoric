@@ -1,13 +1,6 @@
-import PhaserLogo from '../objects/phaserLogo'
-import Bob from '../characters/Bob'
 import AlignGrid from '../lib/AlignGrid';
 
-
-import FpsText from '../objects/fpsText'
 import ScoreText from '../objects/ScoreText'
-
-
-import { createCharacterAnims } from '../anims/CharacterAnims';
 
 
 export default class UIScene extends Phaser.Scene {

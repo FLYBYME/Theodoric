@@ -18,12 +18,15 @@ export default class spriteManager extends EventEmitter {
             this.process(item);
         });
         this.world.on('item:remove', (item) => {
-            //this.add(item);
+            this.remove(item);
+            //let sprite = this.getByID(item.id);
+
         });
         this.world.on('item:move', (item) => {
             this.process(item);
         });
         this.world.on('item:update', (item) => {
+            //console.log(this,item)
             this.process(item);
         });
     }
@@ -55,13 +58,7 @@ export default class spriteManager extends EventEmitter {
 
     createSprite(item) {
 
-        const classKey = UI.keys.find((key) => key.toLowerCase() == item.name);
-        let sprite;
-        if (classKey) {
-            sprite = new UI[classKey](this.scene, item);
-        } else {
-            sprite = new UI.BaseUI(this.scene, item);
-        }
+        let sprite = new UI.BaseUI(this.scene, item);
 
         sprite.createSprite()
 
@@ -70,7 +67,7 @@ export default class spriteManager extends EventEmitter {
         return sprite
     }
     processPlayer(sprite, item, isNew = false) {
-
+        
         if (isNew)
             this.emit('follow', sprite);
 
@@ -84,10 +81,10 @@ export default class spriteManager extends EventEmitter {
         if (!sprite) {
             isNew = true;
             sprite = this.createSprite(item);
-            let sprites = this.sprites.get(sprite.name);
+            let sprites = this.sprites.get(item.name);
             if (!sprites) { // not locked
                 sprites = [];
-                this.sprites.set(sprite.name, sprites);
+                this.sprites.set(item.name, sprites);
             }
             sprites.push(sprite);
         }
@@ -101,6 +98,19 @@ export default class spriteManager extends EventEmitter {
     }
     remove(item) {
 
+
+        const sprites = this.sprites.get(item.name);
+        if (!sprites)
+            return;
+
+        const index = sprites.findIndex((i) => item.id == i.id);
+        if (index == -1) return;
+        const sprite = sprites[index]
+        sprites.splice(index, 1);
+
+        if (sprites.length == 0)
+            this.sprites.delete(item.name);
+        sprite.destroy();
 
     }
 

@@ -3,8 +3,9 @@ import Grass from '../items/Grass.js';
 import Item from '../items/Item.js';
 
 export default class Grid {
-    constructor(size) {
-        this.size = size;
+    constructor(world) {
+        this.world = world;
+        this.size = world.worldSize;
         this.gridSize = 32;
         this.grids = Math.floor(this.size / this.gridSize);
         this.map = [];
@@ -19,7 +20,11 @@ export default class Grid {
                 var gridX = x * gridSize;
                 var gridY = y * gridSize;
 
-                this.map.push({ x: gridX, y: gridY, item: new Grass(gridX, gridY) });
+                this.map.push({
+                    x: gridX,
+                    y: gridY,
+                    item: this.world.itemManager.create('grass', gridX, gridY, true)
+                });
             }
         }
     }
@@ -32,7 +37,7 @@ export default class Grid {
             return false;
         let index = this.getGridIndex(x, y);
         this.map[index].item = setItem;
-        
+
         return true;
     }
     removeGridItem(x, y) {
@@ -41,7 +46,7 @@ export default class Grid {
             return false;
         let index = this.getGridIndex(x, y);
         //if (x == 0 && y == 0)console.trace()
-        this.map[index].item = new Grass(x, y);
+        this.map[index].item = this.world.itemManager.create('grass', x, y, true);
         return true;
     }
 
@@ -54,12 +59,12 @@ export default class Grid {
     getGridItem(x, y) {
 
         if (x < 0 || y < 0 || x >= this.size || y >= this.size) {
-            return { x, y, item: new Bounds(x, y) };
+            return { x, y, item: this.world.itemManager.create('bounds', x, y, true) };
         }
 
         let item = this.map[this.getGridIndex(x, y)];
         if (!item) {
-            return { x, y, item: new Bounds(x, y) }
+            return { x, y, item: this.world.itemManager.create('bounds', x, y, true) }
         }
         return item;
     }

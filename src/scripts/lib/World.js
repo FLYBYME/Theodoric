@@ -1,12 +1,11 @@
-import EventEmitter from './EventEmitter.js'
+import EventEmitter from './EventEmitter.js';
 import Grid from './Grid.js';
-import Bob from '../characters/Bob.js'
 
-import Characters from '../characters/index.js'
-import Obstacles from '../items/obstacles/index.js'
-import Collectables from '../items/collectables/index.js'
 import ItemManager from './ItemManager.js';
 import Timer from './Timer.js';
+
+import Items from '../items.json';
+import ActionManager from './actionManager.js';
 
 let ids = 0;
 export default class World extends EventEmitter {
@@ -17,15 +16,15 @@ export default class World extends EventEmitter {
         this.scene = scene;
 
         this.worldSize = size;
-        this.grid = new Grid(size)
-
+        this.grid = new Grid(this);
 
         this.characters = [];
         this.enemies = [];
 
         this.inputQue = [];
 
-        this.itemManager = new ItemManager(this);
+        this.itemManager = new ItemManager(this, Items);
+        this.actionManager = new ActionManager(this);
 
         this.collectableCount = 10;
         this.obstacleCount = 10;
@@ -38,6 +37,8 @@ export default class World extends EventEmitter {
         this.itemManager.on('remove', (item) => this.emit('item:remove', item.toJSON()))
         this.itemManager.on('death', (item) => this.emit('item:death', item.toJSON()))
         this.itemManager.on('update', (item) => this.emit('item:update', item.toJSON()))
+
+        this.actionManager.on('action', (item) => this.emit('item:update', item.toJSON()))
 
         this.grid.generate();
 
@@ -53,38 +54,12 @@ export default class World extends EventEmitter {
 
         this.updateTimer.reset();
 
-        //this.updateCharacters();
-
         this.itemManager.update();
-
-
-        //const bob = this.characters[0];
-        //if (!bob)
-        //    return;
-        const bobs = this.itemManager.items.get('bob') || [];
-
-        while (this.inputQue.length) {
-            const input = this.inputQue.shift();
-            let bob = bobs.find((bob) => bob.id == input.id)
-            if (!bob) {
-                const location = this.grid.getRandomLocation();
-                bob = this.createCharacter(location.x, location.y, 'bob', input.id);
-
-            }
-            if (bob.move(input.direction)) {
-                //console.log(bob, input)
-                this.emit('item:move', bob.toJSON())
-            }
-        }
-
+        this.actionManager.update();
 
     }
     onInput(input) {
-        const index = this.inputQue.findIndex((i) => input.id == i.id)
-        if (index >= 0) {
-            this.inputQue.splice(index, 1);
-        }
-        this.inputQue.push(input);
+        this.actionManager.onInput(input);
     }
     /*****
      * state
@@ -118,27 +93,28 @@ export default class World extends EventEmitter {
         }
     }
     generateCollectable(location) {
-        const type = Collectables.keys[Math.floor(Math.random() * Collectables.keys.length)]
-        const item = new Collectables[type](location.x, location.y, this);
-        this.itemManager.add(item);
+        const type = this.randomArrayItem([
+            'chest-closed', 'jar',
+            'health-potion', 'stamina-potion', 'strength-potion',
+        ]);
+        const item = this.itemManager.create(type, location.x, location.y)
         return item;
     }
     generateObstacle(location) {
-        const type = Obstacles.keys[Math.floor(Math.random() * Obstacles.keys.length)]
-        const item = new Obstacles[type](location.x, location.y, this);
-        this.itemManager.add(item);
+        const type = this.randomArrayItem(['tree']);
+        const item = this.itemManager.create(type, location.x, location.y);
         return item;
     }
     /*****
      * characters
      */
-    createCharacter(x, y, type, id) {
-        let next = Characters.keys.shift()
-        Characters.keys.push(next)
+    createCharacter(x, y, _type, id) {
+        console.log('createCharacter')
 
-        const character = new Characters[next](x, y, this, type, id);
+        const type = this.randomArrayItem(['bob']);
 
-        this.itemManager.add(character)
+        const character = this.itemManager.create(type, x, y);
+
 
         this.characters.push(character);
 
@@ -146,7 +122,9 @@ export default class World extends EventEmitter {
 
         return character
     }
-
+    randomArrayItem(array) {
+        return array[Math.floor(Math.random() * array.length)]
+    }
     fight(characterA, characterB) {
         const fightID = ids++;
         if (characterA.inFight() &&

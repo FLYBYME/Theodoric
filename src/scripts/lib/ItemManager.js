@@ -1,35 +1,32 @@
 
 import EventEmitter from './EventEmitter.js'
-import Grid from './Grid.js';
-import Bob from '../characters/Bob.js'
 
-import Obstacles from '../items/obstacles/index.js'
 import Item from './Item.js';
 
 export default class ItemManager extends EventEmitter {
 
-    constructor(world) {
+    constructor(world, configs) {
         super();
         this.world = world;
-        this.grid = world.grid;
         this.items = new Map();
-
+        this.configs = configs;
     }
 
+    getByID(id) {
+        for (const [name, items] of this.items.entries()) {
+            for (let index = 0; index < items.length; index++) {
+                const item = items[index];
+                if (item.id == id)
+                    return item;
+            }
+        }
+        return false
+    }
     update() {
         for (const [name, items] of this.items.entries()) {
             for (let index = 0; index < items.length; index++) {
                 const item = items[index];
-                let wasUpdated = item.update();
-                if (item.isCharacter()) {
-                    if (wasUpdated) {
-                        this.emit('update', item);
-                    }
-                    if (!item.isAlive()) {
-                        this.remove(item);
-                        this.emit('death', item);
-                    }
-                }
+
             }
         }
     }
@@ -45,21 +42,24 @@ export default class ItemManager extends EventEmitter {
         return items;
     }
 
-    create(name, x, y) {
-        const config = this.config.find((c) => c.name == name);
+    create(name, x, y, noAdd = false) {
+        const config = this.configs.find((c) => c.name == name);
 
         if (!config)
             return null;
 
         const item = new Item(config);
 
-        this.add(item);
+        item.setXY(x, y)
+
+        if (!noAdd)
+            this.add(item);
 
         return item;
     }
 
     add(item) {
-        this.grid.addGridItem(item);
+        this.world.grid.addGridItem(item);
 
         let items = this.items.get(item.name);
         if (!items) { // not locked
@@ -72,12 +72,13 @@ export default class ItemManager extends EventEmitter {
         this.emit('add', item);
     }
     remove(item) {
-        this.grid.removeGridItem(item.x, item.y);
+        this.world.grid.removeGridItem(item.x, item.y);
         this.emit('remove', item);
 
         const items = this.items.get(item.name);
         if (!items)
             return;
+
         const index = items.indexOf(item);
         items.splice(index, 1);
 

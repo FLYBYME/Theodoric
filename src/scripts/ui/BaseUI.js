@@ -51,7 +51,14 @@ export default class BaseUI extends EventEmitter {
         this.sprite.setScale(item.scale);
         this.sprite.setOrigin(0, 0);
 
+        if (item.character) {
+            this.sprite.setDepth(10);
+        }
+
         this.sprite.id = item.id;
+    }
+    destroy() {
+        this.sprite.destroy();
     }
     /****
      * 
