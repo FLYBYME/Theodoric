@@ -26,8 +26,9 @@ export default class ActionManager extends EventEmitter {
             target = this.world.itemManager.create('bob', x, y, true)
             target.id = input.id;
             this.world.itemManager.add(target);
-
         }
+
+        target.setDirection(input.direction);
 
         let { x, y } = this.directionToXY(input.direction);
 

@@ -24,6 +24,7 @@ export default class Item extends EventEmitter {
 
         this.x = 0;
         this.y = 0;
+        this.direction = 'stop';
 
         this.id = uuid();
 
@@ -64,6 +65,10 @@ export default class Item extends EventEmitter {
         return this.is('removeOnCollect');
     }
 
+    setDirection(direction) {
+        this.direction = direction;
+    }
+
     setXY(x, y) {
         this.x = x;
         this.y = y;
@@ -74,6 +79,7 @@ export default class Item extends EventEmitter {
             id: this.id,
             x: this.x,
             y: this.y,
+            direction: this.direction,
             width: 16,
             height: 16,
             scale: 2,

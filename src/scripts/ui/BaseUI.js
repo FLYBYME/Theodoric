@@ -18,6 +18,9 @@ export default class BaseUI extends EventEmitter {
         this.frames = {
             stop: item.tileMapID,
         };
+        if (item.frames) {
+            Object.keys(item.frames).forEach((key) => this.frames[key] = item.frames[key])
+        }
 
     }
     getFollow() {
