@@ -10,6 +10,7 @@
     "bundle": "npm run build",
     "serve": "serve dist"
   },
+  "type": "module",
   "keywords": [
     "Phaser",
     "Phaser 3",
