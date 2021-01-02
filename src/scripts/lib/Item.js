@@ -1,6 +1,6 @@
-import CharacterStats from "./CharacterStats";
-import EventEmitter from "./EventEmitter";
-import uuid from "./uuid";
+import CharacterStats from "./CharacterStats.js";
+import EventEmitter from "./EventEmitter.js";
+import uuid from "./uuid.js";
 
 class ItemValue {
     constructor(type, worth) {

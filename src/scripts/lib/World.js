@@ -4,8 +4,9 @@ import Grid from './Grid.js';
 import ItemManager from './ItemManager.js';
 import Timer from './Timer.js';
 
-import Items from '../items.json';
 import ActionManager from './actionManager.js';
+
+import Items from '../items.js';
 
 let ids = 0;
 export default class World extends EventEmitter {

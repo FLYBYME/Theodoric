@@ -67,7 +67,7 @@ export default class spriteManager extends EventEmitter {
         return sprite
     }
     processPlayer(sprite, item, isNew = false) {
-        
+
         if (isNew)
             this.emit('follow', sprite);
 
@@ -93,7 +93,8 @@ export default class spriteManager extends EventEmitter {
 
         if (sprite.id == this.id)
             this.processPlayer(sprite, item, isNew);
-
+        else if (item.name == 'bob' && isNew)
+            this.emit('follow-second', sprite);
         return sprite;
     }
     remove(item) {

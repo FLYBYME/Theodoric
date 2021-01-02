@@ -2,17 +2,14 @@ import World from '../src/scripts/lib/World.js'
 
 import HTTP from 'http'
 import * as io from 'socket.io'
+import express from 'express';
+import path from 'path';
 
-var http = HTTP.createServer();
-console.log(io)
-var _io = new io.Server({
-    cors: {
-        origin: "*",
-        methods: ["*"]
-    }
-});
-
-_io.listen(3000, () => {
+var app = express();
+const http = HTTP.createServer(app);
+var _io = new io.Server(http);
+app.use(express.static(`${path.resolve()}/dist/`));
+http.listen(process.env.PORT || 3000, () => {
     console.log('listening on *:3000');
 });
 
@@ -38,6 +35,7 @@ function attachWorldEvents() {
         _io.emit('item:death', item)
     });
     world.on('item:update', (item) => {
+        console.log('update')
         _io.emit('item:update', item)
     })
 
@@ -57,7 +55,7 @@ _io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('input', (input) => {
-        world.onInput(input)
+        world.emit('input', input)
         console.log(input)
     })
 

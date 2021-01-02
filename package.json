@@ -34,7 +34,7 @@
     "author": "Yannick Deubel (https://github.com/yandeu)"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=14.0.0"
   },
   "license": "MIT",
   "devDependencies": {
@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
+    "express": "^4.17.1",
     "phaser": "^3.24.1",
     "socket.io": "^3.0.4"
   }

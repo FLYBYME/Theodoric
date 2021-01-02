@@ -1,4 +1,4 @@
-import Timer from "./Timer";
+import Timer from "./Timer.js";
 
 export default class CharacterStats {
     constructor(stats) {

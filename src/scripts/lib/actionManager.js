@@ -1,4 +1,4 @@
-import EventEmitter from "./EventEmitter";
+import EventEmitter from "./EventEmitter.js";
 
 
 export default class ActionManager extends EventEmitter {
@@ -52,6 +52,10 @@ export default class ActionManager extends EventEmitter {
 
         if (location.isCollectable() && location.removeOnCollect() && !location.hasNextStage()) {
             this.takeStep(x, y, target, location);
+            setTimeout(() => {
+                const newLocation = this.world.grid.getRandomLocation();
+                this.world.itemManager.create(location.name, newLocation.x, newLocation.y);
+            }, 1000);
         }
     }
     stage(x, y, target, location) {

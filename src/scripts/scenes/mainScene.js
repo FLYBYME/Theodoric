@@ -3,7 +3,7 @@ import uuid from '../lib/uuid';
 import World from '../lib/World';
 
 window.sim = null;
-const worldSize = 32 * 20;
+const worldSize = 32 * 25;
 window.world = new World(null, worldSize);
 
 
@@ -46,6 +46,11 @@ export default class MainScene extends Phaser.Scene {
     this.background.setScale(2);
 
     this.id = uuid();
+    if (localStorage.getItem('id')) {
+      this.id = localStorage.getItem('id');
+    } else {
+      localStorage.setItem('id', this.id);
+    }
 
 
     if (typeof io == "undefined") {
@@ -57,6 +62,7 @@ export default class MainScene extends Phaser.Scene {
     this.spriteManager = new spriteManager(this, this.world, this.id);
 
     this.spriteManager.once('follow', (sprite) => this.cameras.main.startFollow(sprite.getFollow(), true))
+    this.spriteManager.once('follow-second', (sprite) => this.cameras.cameras[1].startFollow(sprite.getFollow(), true))
     this.spriteManager.on('player', (sprite) => console.log(sprite))
 
 
@@ -69,14 +75,14 @@ export default class MainScene extends Phaser.Scene {
 
   update() {
 
-
-    world.update();
+    if (typeof io == "undefined")
+      this.world.update();
 
     this.spriteManager.update();
     const input = this.getInputs();
     if (input.direction != 'stop') {
       console.log(`new input ${input.direction}`);
-      world.emit('input', input);
+      this.world.emit('input', input);
     }
   }
 
