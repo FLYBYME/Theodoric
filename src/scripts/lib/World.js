@@ -102,7 +102,9 @@ export default class World extends EventEmitter {
         return item;
     }
     generateObstacle(location) {
-        const type = this.randomArrayItem(['tree']);
+        const type = this.randomArrayItem([
+            'tree', 'piller', 'shrub', 'fire', 'pine'
+        ]);
         const item = this.itemManager.create(type, location.x, location.y);
         return item;
     }

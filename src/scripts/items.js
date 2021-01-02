@@ -8,6 +8,34 @@ export default [
         "stages": []
     },
     {
+        "name": "piller",
+        "tileMapID": 39,
+        "tileMapImageSet": "tiles",
+        "obstacle": true,
+        "stages": []
+    },
+    {
+        "name": "shrub",
+        "tileMapID": 20,
+        "tileMapImageSet": "tiles",
+        "obstacle": true,
+        "stages": []
+    },
+    {
+        "name": "fire",
+        "tileMapID": 60,
+        "tileMapImageSet": "tiles",
+        "obstacle": true,
+        "stages": []
+    },
+    {
+        "name": "pine",
+        "tileMapID": 30,
+        "tileMapImageSet": "tiles",
+        "obstacle": true,
+        "stages": []
+    },
+    {
         "name": "bounds",
         "tileMapID": 38,
         "tileMapImageSet": "tiles",
