@@ -22,6 +22,8 @@ export default class Item extends EventEmitter {
         super();
         this.config = config;
 
+        this.created = Date.now();
+
         this.x = 0;
         this.y = 0;
         this.direction = 'stop';
@@ -36,7 +38,9 @@ export default class Item extends EventEmitter {
     get name() {
         return this.config.name;
     }
-
+    set(key, val) {
+        this.config[key] = val;
+    }
     is(type) {
         return !!this.config[type];
     }
@@ -61,6 +65,15 @@ export default class Item extends EventEmitter {
     getNextStage() {
         return Object.assign({}, this.config.stages[0])
     }
+    stageDelay() {
+        if (this.hasNextStage()) {
+            const stage = this.config.stages[0];
+            return Date.now() > this.created + stage.delay
+        } else {
+            return false;
+        }
+    }
+
     removeOnCollect() {
         return this.is('removeOnCollect');
     }

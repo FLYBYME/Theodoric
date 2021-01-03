@@ -26,7 +26,17 @@ export default class ItemManager extends EventEmitter {
         for (const [name, items] of this.items.entries()) {
             for (let index = 0; index < items.length; index++) {
                 const item = items[index];
+                if (item.isCharacter()) {
+                    if (!item.stats.isAlive()) {
+                        console.log('death')
+                        this.world.actionManager.stage(0, 0, item, item);
+                    } else if (item.is('ai')) {
 
+                    }
+                } else if (item.stageDelay()) {
+                    console.log('stageDelay')
+                    this.world.actionManager.stage(0, 0, item, item);
+                }
             }
         }
     }
@@ -48,7 +58,7 @@ export default class ItemManager extends EventEmitter {
         if (!config)
             return null;
 
-        const item = new Item(config);
+        const item = new Item(JSON.parse(JSON.stringify(config)));
 
         item.setXY(x, y)
 

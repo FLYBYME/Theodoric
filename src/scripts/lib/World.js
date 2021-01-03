@@ -7,6 +7,7 @@ import Timer from './Timer.js';
 import ActionManager from './actionManager.js';
 
 import Items from '../items.js';
+import AIManager from './aiManager.js';
 
 let ids = 0;
 export default class World extends EventEmitter {
@@ -26,6 +27,7 @@ export default class World extends EventEmitter {
 
         this.itemManager = new ItemManager(this, Items);
         this.actionManager = new ActionManager(this);
+        this.aiManager = new AIManager(this)
 
         this.collectableCount = 10;
         this.obstacleCount = 10;

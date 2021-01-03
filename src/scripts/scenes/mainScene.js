@@ -61,8 +61,8 @@ export default class MainScene extends Phaser.Scene {
 
     this.spriteManager = new spriteManager(this, this.world, this.id);
 
-    this.spriteManager.once('follow', (sprite) => this.cameras.main.startFollow(sprite.getFollow(), true))
-    this.spriteManager.once('follow-second', (sprite) => this.cameras.cameras[1].startFollow(sprite.getFollow(), true))
+    this.spriteManager.on('follow', (sprite) => this.cameras.main.startFollow(sprite.getFollow(), true))
+    this.spriteManager.on('follow-second', (sprite) => this.cameras.cameras[1].startFollow(sprite.getFollow(), true))
     this.spriteManager.on('player', (sprite) => console.log(sprite))
 
 

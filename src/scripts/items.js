@@ -65,8 +65,41 @@ export default [
             "up": 40,
             "down": 4
         },
+        "stages": [{
+            "name": "corpse"
+        }]
+    },
+    {
+        "name": "skeleton",
+        "tileMapID": 10,
+        "tileMapImageSet": "characters",
+        "character": true,
+        "stats": {
+            "health": 100,
+            "stamina": 100,
+            "strength": 25
+        },
+        "frames": {
+            "left": 22,
+            "right": 34,
+            "up": 46,
+            "down": 10
+        },
         "stages": []
     },
+    {
+        "name": "corpse",
+        "tileMapID": 4,
+        "tileMapImageSet": "dead",
+        "empty": true,
+        "stages": [{
+            "name": "skeleton",
+            "delay": 10000,
+            "ai": true
+        }]
+    },
+
+
     {
         "name": "chest-closed",
         "tileMapID": 36,

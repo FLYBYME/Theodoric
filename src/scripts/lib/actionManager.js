@@ -43,12 +43,9 @@ export default class ActionManager extends EventEmitter {
             if (location.removeOnCollect())
                 this.world.itemManager.remove(location);
         }
-        if (location.hasNextStage()) {
-            this.stage(x, y, target, location)
-        }
-
-        if (location.isEmpty()) {
-            this.takeStep(x, y, target, location);
+        if (!location.isCharacter() && location.hasNextStage()) {
+            const stage = this.stage(x, y, target, location);
+            process.nextTick(() => this.takeAction(x, y, target, stage))
         }
 
         if (location.isCollectable() && location.removeOnCollect() && !location.hasNextStage()) {
@@ -57,13 +54,24 @@ export default class ActionManager extends EventEmitter {
                 const newLocation = this.world.grid.getRandomLocation();
                 this.world.itemManager.create(location.name, newLocation.x, newLocation.y);
             }, 1000);
+        } else if (location.isEmpty()) {
+            this.takeStep(x, y, target, location);
+        } else {
+            target.stats.stepBlocked(x, y);
         }
     }
     stage(x, y, target, location) {
         const config = location.getNextStage();
         this.world.itemManager.remove(location);
-        const newLocationItem = this.world.itemManager.create(config.name, target.x + x, target.y + y);
-        process.nextTick(() => this.takeAction(x, y, target, newLocationItem))
+        const stage = this.world.itemManager.create(config.name, target.x + x, target.y + y);
+
+        Object.keys(config).forEach((key) => {
+            if (key == 'name' || key == 'delay')
+                return;
+            stage.set(key, config[key]);
+        });
+
+        return stage;
     }
     collect(x, y, target, location) {
         if (location.isCollectable())
