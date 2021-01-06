@@ -84,7 +84,8 @@ export default class MainScene extends Phaser.Scene {
       var x = Math.floor(pointer.x / 32) * 32;
       var y = Math.floor(pointer.y / 32) * 32;
       console.log({ x, y })
-      world.itemManager.create('tree', x, y)
+      this.world.emit('create', { type: 'tree', x, y })
+      //world.itemManager.create()
     });
 
 

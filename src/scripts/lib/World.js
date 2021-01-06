@@ -61,6 +61,7 @@ export default class World extends EventEmitter {
         this.brain.reset(genome)
 
         this.on('input', (input) => this.onInput(input))
+        this.on('create', ({ type, x, y }) => this.itemManager.create(type, x, y))
 
     }
     loop() {
@@ -69,7 +70,7 @@ export default class World extends EventEmitter {
     update() {
 
         //if (!this.updateTimer.ticked())
-          //  return;
+        //  return;
 
         if (!this.brain.item.stats.isAlive()) {
             let item = this.itemManager.create('brain', 0, 0, true);
@@ -82,7 +83,7 @@ export default class World extends EventEmitter {
         }
 
 
-       // this.updateTimer.reset();
+        // this.updateTimer.reset();
 
         this.itemManager.update();
         this.actionManager.update();

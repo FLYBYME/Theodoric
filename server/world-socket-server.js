@@ -27,7 +27,7 @@ function attachWorldEvents() {
         _io.emit('item:remove', item);
     });
     world.on('item:move', (item) => {
-       // console.log('move')
+        // console.log('move')
         _io.emit('item:move', item)
     });
     world.on('item:death', (item) => {
@@ -56,7 +56,11 @@ _io.on('connection', (socket) => {
 
     socket.on('input', (input) => {
         world.emit('input', input)
-        console.log(input)
+        console.log('input', input)
+    })
+    socket.on('create', (data) => {
+        world.emit('create', data)
+        console.log('create', data)
     })
 
     world.state().items.forEach((item) => socket.emit('item:add', item));
