@@ -1,4 +1,4 @@
-import EventEmitter from "./EventEmitte.jsr"
+import EventEmitter from "./EventEmitte.js"
 import Timer from "./Timer.js";
 
 
