@@ -1,5 +1,5 @@
-import EventEmitter from "./EventEmitter"
-import Timer from "./Timer";
+import EventEmitter from "./EventEmitte.jsr"
+import Timer from "./Timer.js";
 
 
 export default class AIManager extends EventEmitter {
