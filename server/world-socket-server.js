@@ -19,15 +19,15 @@ function attachWorldEvents() {
 
 
     world.on('item:add', (item) => {
-        console.log('add')
+        //console.log('add')
         _io.emit('item:add', item)
     });
     world.on('item:remove', (item) => {
-        console.log('remove')
+        //console.log('remove')
         _io.emit('item:remove', item);
     });
     world.on('item:move', (item) => {
-        console.log('move')
+       // console.log('move')
         _io.emit('item:move', item)
     });
     world.on('item:death', (item) => {
@@ -35,7 +35,7 @@ function attachWorldEvents() {
         _io.emit('item:death', item)
     });
     world.on('item:update', (item) => {
-        console.log('update')
+        //console.log('update')
         _io.emit('item:update', item)
     })
 

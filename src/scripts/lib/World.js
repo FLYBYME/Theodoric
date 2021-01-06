@@ -56,7 +56,7 @@ export default class World extends EventEmitter {
         let item = this.itemManager.create('brain', 0, 0, true);
         item.id = this.brain.id;
         this.itemManager.add(item)
-        let genome = world.neat.next()
+        let genome = this.neat.next()
         this.brain.setItem(item)
         this.brain.reset(genome)
 
