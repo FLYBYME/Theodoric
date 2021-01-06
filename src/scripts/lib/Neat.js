@@ -9,7 +9,7 @@ var config = neataptic.config;
 
 /* Easier variable naming */
 var selection = methods.selection;
-window.neataptic = neataptic;
+typeof window === 'undefined' ? null : window.neataptic = neataptic;
 
 export default class Neat extends EventEmitter {
     constructor(input, output, fitness, options) {
