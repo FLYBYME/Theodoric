@@ -62,15 +62,14 @@ export default class spriteManager extends EventEmitter {
 
         sprite.createSprite()
 
-        console.log(`creating new sprite ${item.name} ${sprite.name}`)
+       // console.log(`creating new sprite ${item.name} ${sprite.name}`)
 
         return sprite
     }
     processPlayer(sprite, item, isNew = false) {
-
+        sprite.item = item;
         if (isNew)
             this.emit('follow', sprite);
-
         this.emit('player', sprite);
 
     }
@@ -112,7 +111,8 @@ export default class spriteManager extends EventEmitter {
         if (sprites.length == 0)
             this.sprites.delete(item.name);
         sprite.destroy();
-
+        if (sprite.id == this.id)
+            this.processPlayer(sprite, item, false);
     }
 
 }

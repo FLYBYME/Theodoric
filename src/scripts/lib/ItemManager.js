@@ -22,16 +22,32 @@ export default class ItemManager extends EventEmitter {
         }
         return false
     }
+    getAll(filter) {
+        const all = [];
+        for (const [name, items] of this.items.entries()) {
+            all.push(...items);
+        }
+        if (filter)
+            return all.filter(filter);
+        return all;
+    }
     update() {
         for (const [name, items] of this.items.entries()) {
             for (let index = 0; index < items.length; index++) {
                 const item = items[index];
-                if (item.isCharacter()) {
-                    if (!item.stats.isAlive()) {
-                        console.log('death')
-                        this.world.actionManager.stage(0, 0, item, item);
-                    } else if (item.is('ai')) {
 
+
+
+                if (item.isCharacter()) {
+                    if (item.stats.update())
+                        this.emit('update', item)
+
+                    if (!item.stats.isAlive()) {
+                        console.log(`Character death Score: ${item.stats.score}`)
+                        this.world.actionManager.stage(0, 0, item, item);
+                        
+                    } else if (item.is('ai')) {
+                        this.world.aiManager.processAI(item);
                     }
                 } else if (item.stageDelay()) {
                     console.log('stageDelay')

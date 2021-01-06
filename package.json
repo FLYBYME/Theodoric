@@ -10,6 +10,7 @@
     "bundle": "npm run build",
     "serve": "serve dist"
   },
+  "type": "module",
   "keywords": [
     "Phaser",
     "Phaser 3",
@@ -58,6 +59,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
     "express": "^4.17.1",
+    "neataptic": "^1.4.7",
     "phaser": "^3.24.1",
     "socket.io": "^3.0.4"
   }

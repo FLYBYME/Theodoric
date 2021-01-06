@@ -30,9 +30,10 @@ export default class CharacterStats {
             this.gold +
             this.stamina +
             this.strength +
-            this.steps.count +
+            (this.steps.count * 10) +
             -(this.steps.back / 2) +
             -(this.steps.blocked * 2);
+
         return score;
     }
     toJSON() {
@@ -50,7 +51,7 @@ export default class CharacterStats {
             return false;
         if (this.stamina < this.health && this.staminaTimer.ticked()) {
 
-            this.effectStamina(1);
+            this.effectStamina(this.strength / 40);
             this.staminaTimer.reset();
             return true;
         }
@@ -66,6 +67,7 @@ export default class CharacterStats {
     }
     effectHealth(val) {
         this.health += val
+        //console.log(`affect health ${this.health}`)
         if (this.health < 0)
             this.health = 0;
     }

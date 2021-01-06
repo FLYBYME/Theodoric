@@ -8,6 +8,8 @@ import ActionManager from './actionManager.js';
 
 import Items from '../items.js';
 import AIManager from './aiManager.js';
+import Neat from './Neat.js';
+import Brain from './Brain.js';
 
 let ids = 0;
 export default class World extends EventEmitter {
@@ -28,10 +30,13 @@ export default class World extends EventEmitter {
         this.itemManager = new ItemManager(this, Items);
         this.actionManager = new ActionManager(this);
         this.aiManager = new AIManager(this)
+        this.neat = new Neat(49, 4, null, {});
+
+        this.brain = new Brain(this);
 
         this.collectableCount = 10;
         this.obstacleCount = 10;
-        this.updateTimer = new Timer(0.1);
+        this.updateTimer = new Timer(0.01);
     }
 
     setup() {
@@ -47,19 +52,44 @@ export default class World extends EventEmitter {
 
         this.generateWorld();
 
+        this.neat.createPool(this.neat.template);
+        let item = this.itemManager.create('brain', 0, 0, true);
+        item.id = this.brain.id;
+        this.itemManager.add(item)
+        let genome = world.neat.next()
+        this.brain.setItem(item)
+        this.brain.reset(genome)
+
         this.on('input', (input) => this.onInput(input))
+
+    }
+    loop() {
 
     }
     update() {
 
-        if (!this.updateTimer.ticked())
-            return;
+        //if (!this.updateTimer.ticked())
+          //  return;
 
-        this.updateTimer.reset();
+        if (!this.brain.item.stats.isAlive()) {
+            let item = this.itemManager.create('brain', 0, 0, true);
+            item.id = this.brain.id;
+            this.itemManager.add(item)
+            this.brain.genome.score = this.brain.item.stats.score;
+            let genome = this.neat.next()
+            this.brain.setItem(item)
+            this.brain.reset(genome)
+        }
+
+
+       // this.updateTimer.reset();
 
         this.itemManager.update();
         this.actionManager.update();
 
+        let input = this.brain.update();
+        if (input)
+            this.onInput(input)
     }
     onInput(input) {
         this.actionManager.onInput(input);
@@ -86,6 +116,10 @@ export default class World extends EventEmitter {
         this.obstacleCount = count;
     }
     generateWorld() {
+        (() => {
+            const location = this.grid.getRandomLocation();
+            //this.itemManager.create('ghost-spawn', location.x, location.y);
+        })();
         for (let index = 0; index < this.obstacleCount; index++) {
             const location = this.grid.getRandomLocation();
             this.generateObstacle(location);
@@ -116,12 +150,12 @@ export default class World extends EventEmitter {
     createCharacter(x, y, _type, id) {
         console.log('createCharacter')
 
-        const type = this.randomArrayItem(['bob']);
+        const type = _type || this.randomArrayItem(['bob']);
 
         const character = this.itemManager.create(type, x, y);
 
 
-        this.characters.push(character);
+        //this.characters.push(character);
 
         //this.emit('character:add', character);
 

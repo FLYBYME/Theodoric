@@ -74,4 +74,35 @@ export default class Grid {
 
         return { x: found.x, y: found.y, item: found.item };
     }
+    surroundings(item, offset = 3) {
+
+        let grid = this;
+
+        let x = item.x / grid.gridSize;
+        let y = item.y / grid.gridSize;
+
+        let lowX = x - offset;
+        let lowY = y - offset;
+
+
+        let highX = x + offset + 1;
+        let highY = y + offset + 1;
+
+        let MAX = grid.size / grid.gridSize
+
+        let s = [];
+
+        for (let Y = lowY; Y < highY; Y++) {
+            let surroundings = []
+            for (let X = lowX; X < highX; X++) {
+
+                let gridLocation = grid.getGridItem(X * 32, Y * 32);
+                surroundings.push(gridLocation.item);
+
+            }
+            s.push(surroundings)
+        }
+
+        return s;
+    }
 }

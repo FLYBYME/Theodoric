@@ -11,6 +11,9 @@ export default class Timer {
     setAsSimulation() {
         this.sim = true;
     }
+    hasTicked() {
+        return this.ticked();
+    }
     ticked() {
 
         if (this.sim)

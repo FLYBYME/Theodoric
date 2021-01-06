@@ -16,12 +16,22 @@ class ItemValue {
         this.worth = 0;
     }
 }
-
+const names = {};
+function hashCode(s) {
+    for (var i = 0, h = 0; i < s.length; i++)
+        h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+    return h;
+}
 export default class Item extends EventEmitter {
     constructor(config) {
         super();
         this.config = config;
+        if (!names[config.name]) {
+            names[config.name] = Number(`0.${Math.abs(hashCode(config.name))}`);
+        }
 
+        this.index = names[config.name];
+        
         this.created = Date.now();
 
         this.x = 0;
@@ -40,6 +50,9 @@ export default class Item extends EventEmitter {
     }
     set(key, val) {
         this.config[key] = val;
+    }
+    get(type) {
+        return this.config[type];
     }
     is(type) {
         return !!this.config[type];
@@ -88,7 +101,7 @@ export default class Item extends EventEmitter {
     }
 
     toJSON() {
-        return Object.assign({
+        return Object.assign({}, this.config, {
             id: this.id,
             x: this.x,
             y: this.y,
@@ -96,6 +109,8 @@ export default class Item extends EventEmitter {
             width: 16,
             height: 16,
             scale: 2,
-        }, this.config)
+            index: this.index,
+            stats: this.stats ? this.stats.toJSON() : {}
+        })
     }
 }
