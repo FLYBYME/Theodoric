@@ -80,7 +80,7 @@ export default class MainScene extends Phaser.Scene {
     //this.spriteManager.on('follow-second', (sprite) => this.cameras.cameras[1].startFollow(sprite.getFollow(), true))
     //this.spriteManager.on('player', (sprite) => console.log(sprite))
 
-    this.input.on('pointerdown', function (pointer) {
+    this.input.on('pointerdown', (pointer) => {
       var x = Math.floor(pointer.x / 32) * 32;
       var y = Math.floor(pointer.y / 32) * 32;
       console.log({ x, y })
