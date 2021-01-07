@@ -26,11 +26,11 @@ export default class CharacterStats {
         // time = this.steps.count + this.steps.back + this.steps.blocked + time;
 
         let score =
-            time +
-            this.gold +
-            this.stamina +
-            this.strength +
-            (this.steps.count * 10) +
+            //time +
+            //this.gold +
+            //this.stamina +
+            //this.strength +
+            (this.steps.count) +
             -(this.steps.back / 2) +
             -(this.steps.blocked * 2);
 
@@ -88,12 +88,12 @@ export default class CharacterStats {
         this.steps.count++;
         this.effectStamina(-traversal);
     }
-    stepBlocked(x, y, traversal = 12) {
+    stepBlocked(x, y, traversal = 120) {
         this.addHistory(x, y);
         this.steps.blocked++;
         this.effectStamina(-traversal);
     }
-    stepBack(x, y, traversal = 6) {
+    stepBack(x, y, traversal = 20) {
         this.addHistory(x, y);
         this.steps.back++;
         this.effectStamina(-traversal);
