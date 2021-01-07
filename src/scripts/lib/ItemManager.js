@@ -43,9 +43,11 @@ export default class ItemManager extends EventEmitter {
                         this.emit('update', item)
 
                     if (!item.stats.isAlive()) {
-                        console.log(`Character death Score: ${item.stats.score}`)
+
+                        if (this.world.neat.popIndex % 10 == 0)
+                            console.log(`Character death Score: ${item.stats.score}`)
                         this.world.actionManager.stage(0, 0, item, item);
-                        
+
                     } else if (item.is('ai')) {
                         this.world.aiManager.processAI(item);
                     }

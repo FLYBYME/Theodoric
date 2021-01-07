@@ -86,7 +86,7 @@ export default class Neat extends EventEmitter {
      */
     async evolve() {
         // Check if evaluated, sort the population
-        console.log(`neat ${this.population[this.population.length - 1].score}`)
+        //console.log(`neat ${this.population[this.population.length - 1].score}`)
         if (typeof this.population[this.population.length - 1].score === 'undefined') {
             await this.evaluate();
         }
