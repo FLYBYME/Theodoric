@@ -22,11 +22,11 @@ export default class Neat extends EventEmitter {
         options = options || {};
         this.equal = options.equal || false;
         this.clear = options.clear || true;
-        this.popsize = options.popsize || 100;
-        this.elitism = options.elitism || 20;
+        this.popsize = options.popsize || 500;
+        this.elitism = options.elitism || 50;
         this.provenance = options.provenance || 0;
-        this.mutationRate = options.mutationRate || 0.3;
-        this.mutationAmount = options.mutationAmount || 10;
+        this.mutationRate = options.mutationRate || 0.5;
+        this.mutationAmount = options.mutationAmount || 3;
 
         this.fitnessPopulation = options.fitnessPopulation || false;
 
@@ -37,7 +37,7 @@ export default class Neat extends EventEmitter {
             methods.crossover.UNIFORM,
             methods.crossover.AVERAGE
         ];
-        this.mutation = options.mutation || methods.mutation.FFW;
+        this.mutation = options.mutation || methods.mutation.ALL;
 
         this.template = options.network || neataptic.architect.LSTM(input, 1, output);
 
