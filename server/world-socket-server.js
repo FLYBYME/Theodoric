@@ -71,7 +71,7 @@ _io.on('connection', (socket) => {
 
 function loop() {
     world.update();
-    setTimeout(loop, 1)
+    setImmediate(loop)
 }
 loop()
 

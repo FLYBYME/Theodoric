@@ -1,20 +1,8 @@
 import EventEmitter from './EventEmitter.js'
 import Grid from './Grid.js';
 
-import Items from '../items/index.js'
+import Items from '../items.js'
 
-const ItemMap = {
-    '38': Items.Obstacles.Tree,
-    '39': Items.Obstacles.Piller,
-    '20': Items.Obstacles.Shrub,
-    '60': Items.Obstacles.Fire,
-    //
-    '2': Items.Obstacles.Wall,
-    '1': Items.Obstacles.WallSide,
-    '3': Items.Obstacles.WallSideBack,
-//
-    '47': Items.Door,
-}
 
 export default class Map extends EventEmitter {
 
@@ -34,12 +22,19 @@ export default class Map extends EventEmitter {
             let x = Math.floor(index / devider);
             let y = index - x * devider;
             console.log(element, !!ItemMap[`${element}`])
-            if (ItemMap[`${element}`])
+            if (ItemMap[`${element}`]) {
+
+                let config = Items.find((config) => config.tileMapID == element);
+                if (!config) {
+                    config = Items.find((config) => config.name == 'grass');
+                }
+               // const item = this.world.itemManager.create(config.name)
                 this.items.push({
                     x: x * 32,
                     y: y * 32,
-                    item: ItemMap[`${element}`]
+                    config: config
                 });
+            }
         }
     }
 }
