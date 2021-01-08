@@ -7,6 +7,9 @@ export default class Timer {
         this.sim = false;
         this.ticks = 0;
     }
+    setDelay(delay) {
+        this.delay = delay
+    }
 
     setAsSimulation() {
         this.sim = true;

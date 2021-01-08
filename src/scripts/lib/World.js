@@ -1,4 +1,7 @@
 import EventEmitter from './EventEmitter.js';
+import neataptic from 'neataptic';
+
+
 import Grid from './Grid.js';
 
 import ItemManager from './ItemManager.js';
@@ -30,7 +33,25 @@ export default class World extends EventEmitter {
         this.itemManager = new ItemManager(this, Items);
         this.actionManager = new ActionManager(this);
         this.aiManager = new AIManager(this)
-        this.neat = new Neat(49, 4, null, {});
+        this.neat = new Neat(49, 4, null, {
+            mutation: [
+                neataptic.methods.mutation.ADD_NODE,
+                neataptic.methods.mutation.SUB_NODE,
+                neataptic.methods.mutation.ADD_CONN,
+                neataptic.methods.mutation.SUB_CONN,
+                neataptic.methods.mutation.MOD_WEIGHT,
+                neataptic.methods.mutation.MOD_BIAS,
+                neataptic.methods.mutation.MOD_ACTIVATION,
+                neataptic.methods.mutation.ADD_GATE,
+                neataptic.methods.mutation.SUB_GATE,
+                neataptic.methods.mutation.ADD_SELF_CONN,
+                neataptic.methods.mutation.SUB_SELF_CONN,
+                neataptic.methods.mutation.ADD_BACK_CONN,
+                neataptic.methods.mutation.SUB_BACK_CONN
+            ],
+            popsize: 500,
+            elitism: Math.round(0.1 * 500)
+        });
 
         this.brain = new Brain(this);
 
@@ -62,7 +83,8 @@ export default class World extends EventEmitter {
 
         this.on('input', (input) => this.onInput(input))
         this.on('create', ({ type, x, y }) => this.itemManager.create(type, x, y))
-
+        this.on('time:inc', () => this.updateTimer.setDelay(this.updateTimer.delay + 0.1))
+        this.on('time:dic', () => this.updateTimer.setDelay(this.updateTimer.delay - 0.1))
     }
     loop() {
 
@@ -70,7 +92,8 @@ export default class World extends EventEmitter {
     update() {
 
         //if (!this.updateTimer.ticked())
-        //  return;
+        //    return;
+        //this.updateTimer.reset();
 
         if (!this.brain.item.stats.isAlive()) {
             let item = this.itemManager.create('brain', 0, 0, true);
@@ -83,7 +106,6 @@ export default class World extends EventEmitter {
         }
 
 
-        // this.updateTimer.reset();
 
         this.itemManager.update();
         this.actionManager.update();

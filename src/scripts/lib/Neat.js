@@ -39,7 +39,11 @@ export default class Neat extends EventEmitter {
         ];
         this.mutation = options.mutation || methods.mutation.FFW;
 
-        this.template = options.network || neataptic.architect.LSTM(input, 1, output);
+        this.template = options.network || neataptic.architect.Random(
+            input,
+            0,
+            output
+        );
 
         this.maxNodes = options.maxNodes || Infinity;
         this.maxConns = options.maxConns || Infinity;
