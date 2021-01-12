@@ -143,7 +143,7 @@ export default [
         "name": "ghost-spawn",
         "tileMapID": 31,
         "tileMapImageSet": "tiles",
-        "obstacle": true,
+        "obstacle": false,
         "stages": [{
             "name": "ghost",
             "delay": 1000,
@@ -161,7 +161,7 @@ export default [
         "name": "ghost-spawn-a",
         "tileMapID": 31,
         "tileMapImageSet": "tiles",
-        "obstacle": true,
+        "obstacle": false,
         "stages": [{
             "name": "ghost",
             "delay": 1000,

@@ -2,7 +2,6 @@ import 'phaser'
 import '@babel/polyfill'
 
 import MainScene from './scenes/mainScene'
-import UIScene from './scenes/UIScene'
 import PreloadScene from './scenes/preloadScene'
 
 const DEFAULT_WIDTH = 32 * 17
@@ -15,10 +14,10 @@ const config = {
     parent: 'phaser-game',
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT
+    width: window.innerWidth,
+    height: window.innerHeight
   },
-  scene: [PreloadScene, MainScene, UIScene],
+  scene: [PreloadScene, MainScene],
   physics: {
     default: 'arcade',
     arcade: {
